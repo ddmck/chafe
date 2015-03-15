@@ -39,7 +39,7 @@ app.get('*', function(req, res){
 
 });
 
-app.listen('3010');
+app.listen('5000');
 
 console.log('Magic happens on port 3010');
 
