@@ -1,5 +1,4 @@
 var express = require('express');
-var fs = require('fs');
 var phantom = require('phantom');
 var app     = express();
 
@@ -26,7 +25,7 @@ app.get('/scrape/:id', function(req, res){
                           });
    
                           return {
-                              s: sArr
+                              sizes: sArr
                           };
                       }, function(result) {
                           res.send(result);
