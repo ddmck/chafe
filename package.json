@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "express": "^4.12.2",
+    "lodash": "^3.6.0",
     "phantom": "^0.7.2"
   },
   "devDependencies": {},
