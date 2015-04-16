@@ -9,6 +9,7 @@ var hof = require('./scrapers/hof');
 var johnLewis = require('./scrapers/john_lewis');
 var topshop = require('./scrapers/topshop');
 var topman = require('./scrapers/topman');
+var schuh = require('./scrapers/schuh');
 var site;
 
 app.use(function(req, res, next) {
@@ -44,7 +45,10 @@ app.get('*', function(req, res){
   } else if (url.indexOf("www.topman.com") !== -1) {
     console.log("Scraping a Topman Product");
     site = topman;
-  } 
+  } else if (url.indexOf("www.schuh.co.uk") !== -1) {
+    console.log("Scraping Schuh Product");
+    site = schuh;
+  }
 
   if (site) {
     scrapers(res, url, site);
