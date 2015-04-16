@@ -36,16 +36,16 @@ app.get('*', function(req, res){
   } else if (url.indexOf("www.houseoffraser.co.uk") !== -1) {
     console.log("Scraping a House of Fraser Product")
     site = hof;
-  } else if (url.indexOf("www.johnlewis.com") !== -1) {
+  } else if (url.indexOf("fm-d0363") !== -1) {
     console.log("Scraping a John Lewis Product");
     site = johnLewis;
-  } else if (url.indexOf("www.topshop.com") !== -1) {
+  } else if (url.indexOf("companyId=38aa0d7f-6514-4cb3-bbdc-df0d32d48b7f") !== -1) {
     console.log("Scraping a Topshop Product");
     site = topshop;
-  } else if (url.indexOf("www.topman.com") !== -1) {
+  } else if (url.indexOf("companyId=f672348a-d6e4-4226-9b15-389bccd91b1f") !== -1) {
     console.log("Scraping a Topman Product");
     site = topman;
-  } else if (url.indexOf("www.schuh.co.uk") !== -1) {
+  } else if (url.indexOf("fm-d0378") !== -1) {
     console.log("Scraping Schuh Product");
     site = schuh;
   }
