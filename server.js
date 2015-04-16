@@ -3,6 +3,14 @@ var phantom = require('phantom');
 var _ = require('lodash');
 var app     = express();
 
+var scrapers = require('./scrapers');
+var asos = require('./scrapers/asos');
+var hof = require('./scrapers/hof');
+var johnLewis = require('./scrapers/john_lewis');
+var topshop = require('./scrapers/topshop');
+var topman = require('./scrapers/topman');
+var site;
+
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
@@ -23,118 +31,23 @@ app.get('*', function(req, res){
   console.log("Scraping: " + url);
   if (url.indexOf("www.asos.com") !== -1) {
     console.log("scraping an asos product"); 
-    phantom.create(function(ph) {
-      return ph.createPage(function(page) {
-        return page.open(url, function(status) {
-          console.log("opened site? ", status);         
-     
-                page.injectJs('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js', function() {
-                    //jQuery Loaded.
-                    //Wait for a bit for AJAX content to load on the page. Here, we are waiting 5 seconds.
-                    setTimeout(function() {
-                        return page.evaluate(function() {
-     
-                            //Get what you want from the page using jQuery. A good way is to populate an object with all the jQuery commands that you need and then return the object.
-                            var sArr = [];
-
-                            $('#ctl00_ContentMainPage_ctlSeparateProduct_drpdwnSize option').each(function() {
-                                sArr.push($(this).html());
-                            });
-     
-                            return {
-                                sizes: sArr
-                            };
-                        }, function(result) {
-                            result.sizes = _.drop(result.sizes, 1);
-                            result.sizes = _.reject(result.sizes, function(s){
-                              console.log(s);
-                              console.log(s.indexOf("- Not available"));
-                              return s.indexOf("- Not available") !== -1
-                            });
-                            result.sizes = _.map(result.sizes, function(n) {
-                              return {name: n}
-                            });
-                            res.send(result);
-                            ph.exit();
-                        });
-                    }, 100);
-     
-                });
-            });
-        });
-    });
+    site = asos;
   } else if (url.indexOf("www.houseoffraser.co.uk") !== -1) {
     console.log("Scraping a House of Fraser Product")
-    phantom.create(function(ph) {
-      return ph.createPage(function(page) {
-        return page.open(url, function(status) {
-          console.log("opened site? ", status);         
-     
-                page.injectJs('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js', function() {
-                    //jQuery Loaded.
-                    //Wait for a bit for AJAX content to load on the page. Here, we are waiting 5 seconds.
-                    setTimeout(function() {
-                        return page.evaluate(function() {
-     
-                            //Get what you want from the page using jQuery. A good way is to populate an object with all the jQuery commands that you need and then return the object.
-                            var sArr = [];
-
-                            $('.size-swatches-list li:not(.disabled) a').each(function() {
-                                sArr.push($(this).html());
-                            });
-     
-                            return {
-                                sizes: sArr
-                            };
-                        }, function(result) {
-                            result.sizes = _.map(result.sizes, function(n) {
-                              return {name: n}
-                            });
-                            res.send(result);
-                            ph.exit();
-                        });
-                    }, 100);
-     
-                });
-            });
-        });
-    });
+    site = hof;
   } else if (url.indexOf("www.johnlewis.com") !== -1) {
     console.log("Scraping a John Lewis Product");
-    phantom.create(function(ph) {
-      return ph.createPage(function(page) {
-        return page.open(url, function(status) {
-          console.log("opened site? ", status);         
-     
-                page.injectJs('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js', function() {
-                    //jQuery Loaded.
-                    //Wait for a bit for AJAX content to load on the page. Here, we are waiting 5 seconds.
-                    setTimeout(function() {
-                        return page.evaluate(function() {
-     
-                            //Get what you want from the page using jQuery. A good way is to populate an object with all the jQuery commands that you need and then return the object.
-                            var sArr = [];
+    site = johnLewis;
+  } else if (url.indexOf("www.topshop.com") !== -1) {
+    console.log("Scraping a Topshop Product");
+    site = topshop;
+  } else if (url.indexOf("www.topman.com") !== -1) {
+    console.log("Scraping a Topman Product");
+    site = topman;
+  } 
 
-                            $('#prod-product-size ul.selection-grid li:not(.out-of-stock) a span').each(function() {
-                                sArr.push($(this).html());
-                            });
-     
-                            return {
-                                sizes: sArr
-                            };
-                        }, function(result) {
-                            result.sizes = _.map(result.sizes, function(n) {
-                              return {name: n}
-                            });
-                            res.send(result);
-                            ph.exit();
-                        });
-                    }, 100);
-     
-                });
-            });
-        });
-    });
+  if (site) {
+    scrapers(res, url, site);
   } else {
     res.send("cant scrape this currently");
   }
