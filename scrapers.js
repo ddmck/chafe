@@ -18,7 +18,7 @@ module.exports = function(res, url, site){
                   $(selector[0]).each(function() {
                     sArr.push($(this).html());
                   });
-                } else {
+                } else if (selector[1]) {
                   $(selector[1]).each(function() {
                     sArr.push($(this).html());
                   });
