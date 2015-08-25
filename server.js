@@ -3,7 +3,7 @@ var phantom = require('phantom');
 var _ = require('lodash');
 var app     = express();
 
-var scrapers = require('./scrapers');
+var scrapers = require('./scraper');
 var asos = require('./scrapers/asos');
 var hof = require('./scrapers/hof');
 var johnLewis = require('./scrapers/john_lewis');
@@ -31,7 +31,7 @@ app.get('*', function(req, res){
   var url = req.originalUrl.substring(1);
   console.log("Scraping: " + url);
   if (url.indexOf("www.asos.com") !== -1) {
-    console.log("scraping an asos product"); 
+    console.log("scraping an asos product");
     site = asos;
   } else if (url.indexOf("www.houseoffraser.co.uk") !== -1) {
     console.log("Scraping a House of Fraser Product")

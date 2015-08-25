@@ -1,7 +1,8 @@
 npm install
+
 node server.js
 
-navigate to http://localhost:3010/{link to be scraped}
+navigate to http://localhost:5000/{link to be scraped}
 
 returns sizes of asos products
 
